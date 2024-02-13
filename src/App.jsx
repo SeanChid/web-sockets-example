@@ -1,34 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [socket, setSocket] = useState(null)
+  const [message, setMessage] = useState('')
+  const [receivedMessage, setReceivedMessage] = useState('')
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080')
+
+    ws.onopen = () => {
+      console.log('Connected to server')
+      setSocket(ws)
+    }
+
+    ws.onmessage = (event) => {
+      event.data.text().then((text) => {
+        setReceivedMessage(text)
+      })
+    }
+
+    ws.onclose = () => {
+      console.log('Disconnected from server')
+    }
+
+    return () => {
+      ws.close()
+    }
+  }, [])
+
+  const sendMessage = () => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(message)
+      setMessage('')
+    } else {
+      console.log('Socket not connected')
+    }
+  }
 
   return (
-    <>
+    <div className='App'>
+      <h1>WebSocket Example</h1>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input
+          type='text'
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button onClick={sendMessage}>Send</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>
+        <h2>Received Message:</h2>
+        <p>{receivedMessage}</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
