@@ -4,14 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"nodemon server/index.js -w server/index.js -w src\" \"nodemon server/websocket.js\"",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "concurrently": "^8.2.2",
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sequelize": "^6.37.0",
+    "vite-express": "^0.15.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {

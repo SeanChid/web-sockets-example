@@ -1,21 +1,10 @@
-import {WebSocketServer} from 'ws'
+import express from 'express'
+import ViteExpress from 'vite-express'
 
-const wss = new WebSocketServer({port: 8080})
+const app = express()
 
-wss.on('connection', function connection(ws) {
-    console.log('A new client connected')
+app.use(express.json())
+app.use(express.static('public'))
+app.use(express.urlencoded({extended: false}))
 
-    ws.on('message', function incoming(message) {
-        console.log('received: %s', message)
-
-        wss.clients.forEach(function each(client) {
-            if (client !== ws && client.readyState === client.OPEN) {
-                client.send(message)
-            }
-        })
-    })
-
-    ws.on('close', function close() {
-        console.log('Client disconnected')
-    })
-})
+ViteExpress.listen(app, 8000, () => console.log('server is running on 8000'))
