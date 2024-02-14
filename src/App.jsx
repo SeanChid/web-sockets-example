@@ -2,56 +2,60 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [socket, setSocket] = useState(null)
-  const [message, setMessage] = useState('')
-  const [receivedMessage, setReceivedMessage] = useState('')
+  const [ws, setWs] = useState(null)
+  const [chatMessages, setChatMessages] = useState([])
+  const [messageInput, setMessageInput] = useState('')
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080')
-
-    ws.onopen = () => {
-      console.log('Connected to server')
-      setSocket(ws)
-    }
-
-    ws.onmessage = (event) => {
-      event.data.text().then((text) => {
-        setReceivedMessage(text)
-      })
-    }
-
-    ws.onclose = () => {
-      console.log('Disconnected from server')
-    }
+    const newWs = new WebSocket('ws://localhost:8080')
+    setWs(newWs)
 
     return () => {
-      ws.close()
+      newWs.close()
     }
   }, [])
 
-  const sendMessage = () => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(message)
-      setMessage('')
-    } else {
-      console.log('Socket not connected')
+  useEffect(() => {
+    if (!ws) return
+
+    ws.onmessage = function(event) {
+      const message = JSON.parse(event.data)
+      console.log(event.data)
+      setChatMessages(prevMessages => [...prevMessages, message])
     }
+  }, [ws])
+
+  const handleMessageChange = event => {
+    setMessageInput(event.target.value)
+  }
+
+  const handleMessageSend = () => {
+    if (!ws || messageInput.trim() === '') return
+
+    const chatMessage = {
+      sender: 'Player',
+      message: messageInput.trim(),
+      timestamp: new Date().toISOString()
+    }
+    ws.send(JSON.stringify(chatMessage))
+    setMessageInput('')
   }
 
   return (
-    <div className='App'>
-      <h1>WebSocket Example</h1>
+    <div>
+      <h1>WebSocket Chat Room</h1>
+      <div>
+        {chatMessages.map((message, index) => (
+          <div key={index}>{`${message.sender}: ${message.message} ${message.timestamp}`}</div>
+        ))}
+      </div>
       <div>
         <input
           type='text'
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={messageInput}
+          onChange={handleMessageChange}
         />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-      <div>
-        <h2>Received Message:</h2>
-        <p>{receivedMessage}</p>
+        <button onClick={handleMessageSend}>Send</button>
       </div>
     </div>
   )
