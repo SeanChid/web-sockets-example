@@ -33,6 +33,7 @@ function App() {
     if (!ws || messageInput.trim() === '') return
 
     const chatMessage = {
+      type: 'chatMessage',
       sender: 'Player',
       message: messageInput.trim(),
       timestamp: new Date().toISOString()

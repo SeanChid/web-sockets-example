@@ -14,8 +14,9 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
         const data = JSON.parse(message)
 
-        // if (data.type === 'chatMessage') {
+        if (data.type === 'chatMessage') {
             const chatMessage = {
+                type: 'chatMessage',
                 sender: data.sender,
                 message: data.message,
                 timestamp: new Date().toISOString()
@@ -28,7 +29,7 @@ wss.on('connection', function connection(ws) {
                     client.send(JSON.stringify(chatMessage))
                 }
             })
-        // }
+        }
 
 
     })
