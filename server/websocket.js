@@ -5,7 +5,7 @@ const wss = new WebSocketServer({port: 8080})
 const chatMessages = []
 
 wss.on('connection', function connection(ws) {
-    console.log('A new client connected')
+    console.log('A new client has joined the chat.')
 
     chatMessages.forEach(chatMessage => {
         ws.send(JSON.stringify(chatMessage))
@@ -35,6 +35,6 @@ wss.on('connection', function connection(ws) {
     })
 
     ws.on('close', function close() {
-        console.log('Client disconnected')
+        console.log('A client has disconnected from the chat.')
     })
 })
