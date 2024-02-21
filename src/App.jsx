@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import './App.css'
 
 function App() {
   const [ws, setWs] = useState(null)
   const [chatMessages, setChatMessages] = useState([])
   const [messageInput, setMessageInput] = useState('')
+  const [clientId, setClientId] = useState(null)
+  const [senderName, setSenderName] = useState('')
+  const [validName, setValidName] = useState(false)
 
   useEffect(() => {
+    const newClientId = uuidv4()
+    setClientId(newClientId)
+    
     const newWs = new WebSocket('ws://localhost:8080')
     setWs(newWs)
 
@@ -34,7 +41,8 @@ function App() {
 
     const chatMessage = {
       type: 'chatMessage',
-      sender: 'Player',
+      clientId: clientId,
+      senderName: senderName,
       message: messageInput.trim(),
       timestamp: new Date().toISOString()
     }
@@ -42,24 +50,48 @@ function App() {
     setMessageInput('')
   }
 
-  return (
-    <div>
-      <h1>WebSocket Chat Room</h1>
+  const handleNameSubmit = () => {
+    if (senderName !== '') {
+      setValidName(true)
+    } else {
+      alert('Please input a valid name.')
+    }
+  }
+
+  if (!validName) {
+    return (
       <div>
-        {chatMessages.map((message, index) => (
-          <div key={index}>{`${message.sender}: ${message.message} ${message.timestamp}`}</div>
-        ))}
+        <h1>Enter a name:</h1>
+        <div>
+          <input
+            type='text'
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+          />
+          <button onClick={handleNameSubmit}>Submit</button>
+        </div>
       </div>
+    )
+  } else {
+    return (
       <div>
-        <input
-          type='text'
-          value={messageInput}
-          onChange={handleMessageChange}
-        />
-        <button onClick={handleMessageSend}>Send</button>
+        <h1>WebSocket Chat Room</h1>
+        <div>
+          {chatMessages.map((message, index) => (
+            <div key={index}>{`${message.senderName}: ${message.message} ${message.timestamp}`}</div>
+          ))}
+        </div>
+        <div>
+          <input
+            type='text'
+            value={messageInput}
+            onChange={handleMessageChange}
+          />
+          <button onClick={handleMessageSend}>Send</button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default App

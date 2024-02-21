@@ -17,7 +17,8 @@ wss.on('connection', function connection(ws) {
         if (data.type === 'chatMessage') {
             const chatMessage = {
                 type: 'chatMessage',
-                sender: data.sender,
+                clientId: data.clientId,
+                senderName: data.senderName,
                 message: data.message,
                 timestamp: new Date().toISOString()
             }
