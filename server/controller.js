@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { User, Message } from './db/models.js'
 
 const handlerFunctions = {
@@ -16,7 +17,8 @@ const handlerFunctions = {
                 } else {
                     if (result) {
                         req.session.user = user
-                        res.status(200).json({user})
+                        const token = jwt.sign({userId: user.userId}, 'secretKey', {expiresIn: '1hr'})
+                        res.status(200).json({user, token})
                     } else {
                         res.status(401).json({message: 'Invalid credentials'})
                     }
