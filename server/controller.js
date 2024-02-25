@@ -3,7 +3,7 @@ import { User, Message } from './db/models.js'
 
 const handlerFunctions = {
 
-    postUser: async (req, res) => {
+    loginUser: async (req, res) => {
         const {userName, userPass} = req.body
 
         const user = await User.findOne({where: {userName: userName}})
@@ -13,14 +13,12 @@ const handlerFunctions = {
                 if (err) {
                     console.error('Error comparing passwords:', err)
                     res.status(500).json({message: 'Internal server error'})
+                }
+                if (result) {
+                    req.session.userId = user.userId
+                    res.status(200).json({user})
                 } else {
-                    if (result) {
-                        req.session.userId = user.userId
-                        console.log(req.session)
-                        res.status(200).json({user})
-                    } else {
-                        res.status(401).json({message: 'Invalid credentials'})
-                    }
+                    res.status(401).json({message: 'Invalid credentials'})
                 }
             })
         } else {
@@ -29,9 +27,11 @@ const handlerFunctions = {
     },
 
     getSession: (req, res) => {
-        if (req.session) {
-            console.log(req.session)
-            res.status(200).json({session: req.session})
+
+        const session = req.session
+
+        if (session && session.userId) {
+            res.status(200).json({userId: session.userId})
         } else {
             res.status(404).json({message: 'Session not found'})
         }

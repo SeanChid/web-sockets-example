@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../../redux/action.js'
 import axios from 'axios'
@@ -7,10 +7,22 @@ import axios from 'axios'
 const LoginPage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    
+    useEffect(() => {
+        axios.get('/api/session')
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(login(res.data.user))
+                    navigate('/lobby')
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [dispatch, navigate])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -20,11 +32,10 @@ const LoginPage = () => {
             userPass: password
         }
 
-        axios.post('/api/postUser', user)
+        axios.post('/api/loginUser', user)
             .then((res) => {
                 if (res.status === 200) {
                     dispatch(login(res.data.user))
-                    console.log(login(user))
                     navigate('/lobby')
                 }
             })

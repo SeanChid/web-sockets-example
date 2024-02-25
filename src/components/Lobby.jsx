@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 
 function Lobby() {
@@ -9,17 +11,25 @@ function Lobby() {
   const [clientId, setClientId] = useState(null)
   const [senderName, setSenderName] = useState('')
   const [validName, setValidName] = useState(false)
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const newClientId = uuidv4()
-    setClientId(newClientId)
-    
-    const newWs = new WebSocket('ws://localhost:8080')
-    setWs(newWs)
 
-    return () => {
-      newWs.close()
+    if (!isLoggedIn) {
+        navigate('/')
+    } else {
+        const newClientId = uuidv4()
+        setClientId(newClientId)
+        
+        const newWs = new WebSocket('ws://localhost:8080')
+        setWs(newWs)
+    
+        return () => {
+          newWs.close()
+        }
     }
+    
   }, [])
 
   useEffect(() => {
