@@ -7,7 +7,8 @@ const app = express()
 app.use(session({
     secret: 'superBeans',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false }
 }))
 
 app.use(express.json())
@@ -15,8 +16,9 @@ app.use(express.static('public'))
 app.use(express.urlencoded({extended: false}))
 
 import handlerFunctions from './controller.js'
-const { postUser } = handlerFunctions
+const { postUser, getSession } = handlerFunctions
 
 app.post('/api/postUser', postUser)
+app.get('/api/session', getSession)
 
 ViteExpress.listen(app, 8000, () => console.log('server is running on 8000'))

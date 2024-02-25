@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { User, Message } from './db/models.js'
 
 const handlerFunctions = {
@@ -16,9 +15,9 @@ const handlerFunctions = {
                     res.status(500).json({message: 'Internal server error'})
                 } else {
                     if (result) {
-                        req.session.user = user
-                        const token = jwt.sign({userId: user.userId}, 'secretKey', {expiresIn: '1hr'})
-                        res.status(200).json({user, token})
+                        req.session.userId = user.userId
+                        console.log(req.session)
+                        res.status(200).json({user})
                     } else {
                         res.status(401).json({message: 'Invalid credentials'})
                     }
@@ -26,6 +25,15 @@ const handlerFunctions = {
             })
         } else {
             res.status(404).json({message: 'Invalid credentials'})
+        }
+    },
+
+    getSession: (req, res) => {
+        if (req.session) {
+            console.log(req.session)
+            res.status(200).json({session: req.session})
+        } else {
+            res.status(404).json({message: 'Session not found'})
         }
     }
 }

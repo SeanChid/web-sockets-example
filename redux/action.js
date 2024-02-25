@@ -1,6 +1,6 @@
-export const login = (user, token) => ({
+export const login = (user) => ({
     type: 'LOGIN',
-    payload: {user, token}
+    payload: {user}
 })
 
 export const logout = () => ({

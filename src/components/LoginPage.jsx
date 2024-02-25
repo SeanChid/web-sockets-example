@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../../redux/action.js'
@@ -9,6 +9,8 @@ const LoginPage = () => {
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -21,8 +23,8 @@ const LoginPage = () => {
         axios.post('/api/postUser', user)
             .then((res) => {
                 if (res.status === 200) {
-                    dispatch(login(user, res.data.token))
-                    console.log(res.data.token)
+                    dispatch(login(res.data.user))
+                    console.log(login(user))
                     navigate('/lobby')
                 }
             })
