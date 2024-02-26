@@ -26,6 +26,14 @@ const handlerFunctions = {
         }
     },
 
+    logoutUser: (req, res) => {
+        req.session.destroy((error) => {
+            if (error) {
+                console.error(error)
+            }
+        })
+    },
+
     getSession: (req, res) => {
 
         const session = req.session

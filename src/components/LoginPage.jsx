@@ -16,7 +16,7 @@ const LoginPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     dispatch(login(res.data.user))
-                    navigate('/lobby')
+                    navigate('/user')
                 }
             })
             .catch((error) => {
@@ -36,7 +36,7 @@ const LoginPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     dispatch(login(res.data.user))
-                    navigate('/lobby')
+                    navigate('/user')
                 }
             })
             .catch((error) => {
