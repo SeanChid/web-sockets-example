@@ -30,8 +30,10 @@ const handlerFunctions = {
         req.session.destroy((error) => {
             if (error) {
                 console.error(error)
+                return res.status(500).json({message: 'Internal server error'})
             }
         })
+        return res.status(200).json({message: 'Logout successful'})
     },
 
     getSession: (req, res) => {
