@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { User, Message } from './db/models.js'
+import { User, Lobby, Message } from './db/models.js'
 
 const handlerFunctions = {
 
@@ -45,6 +45,14 @@ const handlerFunctions = {
         } else {
             res.status(404).json({message: 'Session not found'})
         }
+    },
+
+    getLobby: async (req, res) => {
+        const {entryCode} = req.query
+
+        const lobby = await Lobby.findOne({where: {entryCode: entryCode}})
+
+        res.send(lobby)
     }
 }
 

@@ -32,7 +32,7 @@ wss.on('connection', function connection(ws) {
                 lobbyId: data.lobbyId,
                 type: 'chatMessage',
                 message: data.message,
-                timestamp: new Date().toISOString()
+                timestamp: data.timestamp
             })
             .then(newMessage => {
                 wss.clients.forEach(client => {
