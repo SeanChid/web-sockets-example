@@ -26,6 +26,31 @@ User.init (
     }
 )
 
+class Lobby extends Model {}
+
+Lobby.init (
+    {
+        lobbyId: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull: false
+        },
+        entryCode: {
+            type: DataTypes.STRING(30),
+            allowNull: false
+        }
+    }, {
+        sequelize: db
+    }
+)
+
+class UserLobby extends Model {}
+
+UserLobby.init({}, {
+    sequelize: db
+})
+
 class Message extends Model {}
 
 Message.init (
@@ -36,17 +61,22 @@ Message.init (
             primaryKey: true,
             allowNull: false
         },
-        type: {
-            type: DataTypes.STRING(30),
-            allowNull: false
+        lobbyId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            foreignKey: true
         },
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             foreignKey: true
         },
+        type: {
+            type: DataTypes.STRING(30),
+            allowNull: false
+        },
         message: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         timestamp: {
@@ -58,7 +88,10 @@ Message.init (
     }
 )
 
+User.belongsToMany(Lobby, {through: UserLobby})
+Lobby.belongsToMany(User, {through: UserLobby})
 User.hasMany(Message, {foreignKey: 'userId'})
+Lobby.hasMany(Message, {foreignKey: 'lobbyId'})
 
 if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
     console.log('Syncing database...');
@@ -66,4 +99,4 @@ if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
     console.log('Finished syncing database!');
 }
 
-export { User, Message, db }
+export { User, Lobby, Message, db }

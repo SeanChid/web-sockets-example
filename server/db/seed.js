@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import userData from './data/user.json' assert { type: 'json' }
-import { User, db } from './models.js' 
+import lobbyData from './data/lobby.json' assert { type: 'json' }
+import { User, Lobby, db } from './models.js' 
 
 console.log('Syncing database...')
 await db.sync({force: true})
@@ -17,6 +18,16 @@ const usersInDB = await Promise.all(
             userPass: hashedPassword
         })
         return newUser
+    })
+)
+
+const lobbiesInDB = await Promise.all(
+    lobbyData.map(async (lobby) => {
+        const {entryCode} = lobby
+        const newLobby = await Lobby.create({
+            entryCode
+        })
+        return newLobby
     })
 )
 
