@@ -71,6 +71,10 @@ Message.init (
             allowNull: false,
             foreignKey: true
         },
+        userName: {
+            type: DataTypes.STRING(30),
+            allowNull: false
+        },
         type: {
             type: DataTypes.STRING(30),
             allowNull: false

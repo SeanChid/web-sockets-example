@@ -57,6 +57,7 @@ function Lobby() {
     const chatMessage = {
       userId: user.userId,
       lobbyId: lobby.lobbyId,
+      userName: user.userName,
       type: 'chatMessage',
       message: messageInput.trim(),
       timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
@@ -70,7 +71,7 @@ function Lobby() {
         <h1>WebSocket Chat Room</h1>
         <div>
           {chatMessages.map((message, index) => (
-            <div key={index}>{`${message.userId}: ${message.message} ${message.timestamp}`}</div>
+            <div key={index}>{`${message.userName}: ${message.message} ${message.timestamp}`}</div>
           ))}
         </div>
         <div>

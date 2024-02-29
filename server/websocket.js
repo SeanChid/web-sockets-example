@@ -30,6 +30,7 @@ wss.on('connection', function connection(ws) {
             Message.create({
                 userId: data.userId,
                 lobbyId: data.lobbyId,
+                userName: data.userName,
                 type: 'chatMessage',
                 message: data.message,
                 timestamp: data.timestamp
