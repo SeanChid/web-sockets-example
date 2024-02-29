@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import store from '../redux/store.js'
+import { PersistGate } from 'redux-persist/integration/react'
+import store, { persistor } from '../redux/store.js'
 import LoginPage from './components/LoginPage.jsx'
 import UserPage from './components/UserPage.jsx'
 import Lobby from './components/Lobby.jsx'
@@ -10,11 +11,13 @@ function App() {
   return (
     <Router>
       <Provider store={store}>
-        <Routes>
-          <Route path='/' element={<LoginPage />} />
-          <Route path='/user' element={<UserPage />} />
-          <Route path='/lobby' element={<Lobby />} />
-        </Routes>
+        <PersistGate loading={null} persistor={persistor}>
+          <Routes>
+            <Route path='/' element={<LoginPage />} />
+            <Route path='/user' element={<UserPage />} />
+            <Route path='/lobby' element={<Lobby />} />
+          </Routes>
+        </PersistGate>
       </Provider>
     </Router>
   )
