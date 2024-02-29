@@ -46,6 +46,7 @@ const LoginPage = () => {
 
     return (
         <div>
+            <h1>Chatroom Experience</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -53,12 +54,14 @@ const LoginPage = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
+                <br/>
                 <input
                     type='password'
                     placeholder='Password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <br/>
                 <button type='submit'>Login</button>
             </form>
         </div>

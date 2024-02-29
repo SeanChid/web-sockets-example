@@ -42,7 +42,6 @@ function Lobby() {
 
     ws.onmessage = function(event) {
       const message = JSON.parse(event.data)
-      console.log(event.data)
       setChatMessages(prevMessages => [...prevMessages, message])
     }
   }, [ws])
@@ -68,7 +67,7 @@ function Lobby() {
 
     return (
       <div>
-        <h1>WebSocket Chat Room</h1>
+        <h3>Chatroom {lobby.lobbyId}</h3>
         <div>
           {chatMessages.map((message, index) => (
             <div key={index}>{`${message.userName}: ${message.message} ${message.timestamp}`}</div>
@@ -82,6 +81,7 @@ function Lobby() {
           />
           <button onClick={handleMessageSend}>Send</button>
         </div>
+        <button onClick={() => navigate('/user')}>Leave Lobby</button>
       </div>
     )
 }
