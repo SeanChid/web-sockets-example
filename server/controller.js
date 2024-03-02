@@ -53,6 +53,18 @@ const handlerFunctions = {
         const lobby = await Lobby.findOne({where: {entryCode: entryCode}})
 
         res.send(lobby)
+    },
+
+    addLobby: async (req, res) => {
+        const {entryCode} = req.body
+
+        const newLobby = {
+            entryCode
+        }
+        await Lobby.create(newLobby)
+        const lobby = await Lobby.findOne({where: {entryCode: entryCode}})
+
+        res.send(lobby)
     }
 }
 

@@ -38,6 +38,7 @@ Lobby.init (
         },
         entryCode: {
             type: DataTypes.STRING(30),
+            unique: true,
             allowNull: false
         }
     }, {

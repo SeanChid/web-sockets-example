@@ -1,9 +1,9 @@
 import {WebSocketServer, WebSocket} from 'ws'
-import { Message } from './db/models.js'
+import { Lobby, Message } from './db/models.js'
 
 const wss = new WebSocketServer({port: 8080})
 
-// const chatMessages = []
+const lobbyChannels = new Map()
 
 wss.on('connection', function connection(ws) {
     console.log('A new client has joined the chat.')
@@ -18,12 +18,23 @@ wss.on('connection', function connection(ws) {
             console.error(error)
         })
 
-    // chatMessages.forEach(chatMessage => {
-    //     ws.send(JSON.stringify(chatMessage))
-    // })
-
-    ws.on('message', function incoming(message) {
+    ws.on('message', async function incoming(message) {
         const data = JSON.parse(message)
+
+        if (data.type === 'joinLobby') {
+            const lobbyId = data.lobbyId
+            const lobby = await Lobby.findByPk(lobbyId)
+            if (lobby) {
+                if (!lobbyChannels.has(lobbyId)) {
+                    lobbyChannels.set(lobbyId, new Set())
+                }
+                lobbyChannels.get(lobbyId).add(ws)
+            }
+        }
+
+        if (data.type === 'createLobby') {
+            const newLobby = await Lobby.create()
+        }
 
         if (data.type === 'chatMessage') {
 
@@ -45,22 +56,6 @@ wss.on('connection', function connection(ws) {
             .catch(error => {
                 console.error(error)
             })
-
-            // const chatMessage = {
-            //     type: 'chatMessage',
-            //     clientId: data.clientId,
-            //     senderName: data.senderName,
-            //     message: data.message,
-            //     timestamp: new Date().toISOString()
-            // }
-
-            // chatMessages.push(chatMessage)
-
-            // wss.clients.forEach(client => {
-            //     if (client.readyState === WebSocket.OPEN) {
-            //         client.send(JSON.stringify(chatMessage))
-            //     }
-            // })
         }
     })
 

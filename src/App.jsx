@@ -15,7 +15,7 @@ function App() {
           <Routes>
             <Route path='/' element={<LoginPage />} />
             <Route path='/user' element={<UserPage />} />
-            <Route path='/lobby' element={<Lobby />} />
+            <Route path='/lobby/:lobbyId' element={<Lobby />} />
           </Routes>
         </PersistGate>
       </Provider>
