@@ -36,7 +36,7 @@ const UserPage = () => {
         axios.post('/api/lobby', newLobby)
             .then((res) => {
                 setLobbyId(res.data.lobbyId)
-                navigate(`/lobby/${res.data.lobbyId}`)
+                navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
             })
             .catch((error) => {
                 console.log(error)

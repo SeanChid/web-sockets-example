@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
@@ -13,6 +13,8 @@ function Lobby() {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   const user = useSelector(state => state.auth.user)
   const navigate = useNavigate()
+  const location = useLocation()
+  const {entryCode} = location.state
 
   useEffect(() => {
 
@@ -21,7 +23,7 @@ function Lobby() {
     } else {
         const newWs = new WebSocket('ws://localhost:8080')
         setWs(newWs)
-        axios.get('/api/lobby?entryCode=waffle')
+        axios.get(`/api/lobby?entryCode=${entryCode}`)
           .then((res) => {
             setLobby(res.data)
           })
