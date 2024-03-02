@@ -65,6 +65,14 @@ const handlerFunctions = {
         const lobby = await Lobby.findOne({where: {entryCode: entryCode}})
 
         res.send(lobby)
+    },
+
+    joinLobby: async (req, res) => {
+        const {entryCode} = req.body
+
+        const lobby = await Lobby.findOne({where: {entryCode: entryCode}})
+
+        res.send(lobby)
     }
 }
 

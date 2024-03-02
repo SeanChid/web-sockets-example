@@ -7,6 +7,7 @@ import axios from 'axios'
 function Lobby() {
     
   const [ws, setWs] = useState(null)
+  const [hasJoined, setHasJoined] = useState(false)
   const [chatMessages, setChatMessages] = useState([])
   const [messageInput, setMessageInput] = useState('')
   const [lobby, setLobby] = useState({})
@@ -37,7 +38,18 @@ function Lobby() {
     }
 
 
-  }, [])
+  }, [isLoggedIn, navigate, entryCode])
+
+  useEffect(() => {
+    if (ws && ws.readyState === WebSocket.OPEN && lobby.lobbyId && !hasJoined) {
+      const joinMessage = {
+        type: 'joinLobby',
+        lobbyId: lobby.lobbyId
+      }
+      ws.send(JSON.stringify(joinMessage))
+      setHasJoined(true)
+    }
+  }, [ws, lobby, hasJoined])
 
   useEffect(() => {
     if (!ws) return
@@ -69,7 +81,7 @@ function Lobby() {
 
     return (
       <div>
-        <h3>Chatroom {lobby.lobbyId}</h3>
+        <h3>Chatroom {lobby.lobbyId}, code: {entryCode}</h3>
         <div>
           {chatMessages.map((message, index) => (
             <div key={index}>{`${message.userName}: ${message.message} ${message.timestamp}`}</div>

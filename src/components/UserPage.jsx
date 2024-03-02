@@ -5,7 +5,6 @@ import { logout } from '../../redux/action'
 import axios from 'axios'
 
 const UserPage = () => {
-    const [lobbyId, setLobbyId] = useState(null)
     const [entryCode, setEntryCode] = useState('')
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
@@ -29,13 +28,25 @@ const UserPage = () => {
     }
 
     const createLobby = () => {
+        const generatedCode = Math.random().toString(36).substr(2, 8).toUpperCase()
+
         const newLobby = {
-            entryCode: entryCode
+            entryCode: generatedCode
         }
 
         axios.post('/api/lobby', newLobby)
             .then((res) => {
-                setLobbyId(res.data.lobbyId)
+                setEntryCode(generatedCode)
+                navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    const joinLobby = () => {
+        axios.post('/api/joinLobby', {entryCode})
+            .then((res) => {
                 navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
             })
             .catch((error) => {
@@ -49,10 +60,11 @@ const UserPage = () => {
             <br/>
             <input
                 type='text'
-                placeholder='Choose Entry Code'
+                placeholder='Enter Entry Code'
                 value={entryCode}
                 onChange={(e) => setEntryCode(e.target.value)}
             />
+            <button onClick={joinLobby}>Join Lobby</button>
             <br/>
             <button onClick={createLobby}>Create Lobby</button>
             <br/>
