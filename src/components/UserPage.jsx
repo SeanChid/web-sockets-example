@@ -28,15 +28,14 @@ const UserPage = () => {
     }
 
     const createLobby = () => {
-        const generatedCode = Math.random().toString(36).substr(2, 8).toUpperCase()
+        // const generatedCode = Math.floor(1000 + Math.random() * 9000).toString()
 
         const newLobby = {
-            entryCode: generatedCode
+            entryCode: entryCode
         }
 
         axios.post('/api/lobby', newLobby)
             .then((res) => {
-                setEntryCode(generatedCode)
                 navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
             })
             .catch((error) => {
