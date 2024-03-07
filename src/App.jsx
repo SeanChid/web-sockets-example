@@ -5,6 +5,7 @@ import store, { persistor } from '../redux/store.js'
 import LoginPage from './components/LoginPage.jsx'
 import UserPage from './components/UserPage.jsx'
 import Lobby from './components/Lobby.jsx'
+import Register from './components/Register.jsx'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path='/' element={<LoginPage />} />
             <Route path='/user' element={<UserPage />} />
             <Route path='/lobby/:lobbyId' element={<Lobby />} />
+            <Route path='/register' element={<Register />} />
           </Routes>
         </PersistGate>
       </Provider>

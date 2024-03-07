@@ -64,6 +64,8 @@ const LoginPage = () => {
                 <br/>
                 <button type='submit'>Login</button>
             </form>
+            <br/>
+            <button onClick={() => navigate('/register')}>Register</button>
         </div>
     )
 }
