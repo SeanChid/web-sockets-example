@@ -36,6 +36,19 @@ const handlerFunctions = {
         return res.status(200).json({message: 'Logout successful'})
     },
 
+    addUser: async (req, res) => {
+        const {userName, userPass} = req.body
+
+        const hashedPassword = await bcrypt.hash(userPass, 10)
+
+        const newUser = await User.create({
+            userName,
+            userPass: hashedPassword
+        })
+
+        res.send(newUser)
+    },
+
     getSession: (req, res) => {
 
         const session = req.session

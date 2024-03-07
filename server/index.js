@@ -19,6 +19,7 @@ import handlerFunctions from './controller.js'
 const {
     loginUser,
     logoutUser,
+    addUser,
     getSession,
     getLobby,
     addLobby,
@@ -27,6 +28,7 @@ const {
 
 app.post('/api/loginUser', loginUser)
 app.post('/api/logoutUser', logoutUser)
+app.post('/api/user', addUser)
 app.get('/api/session', getSession)
 app.get('/api/lobby', getLobby)
 app.post('/api/lobby', addLobby)
