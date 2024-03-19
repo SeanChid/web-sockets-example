@@ -31,6 +31,7 @@ const Register = () => {
 
     return (
         <div>
+            <h2>Registration</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -53,7 +54,7 @@ const Register = () => {
                     onChange={(e) => setConfirmPass(e.target.value)}
                 />
                 <br/>
-                <button type='submit'>Complete Registration</button>
+                <button type='submit'>Register User</button>
             </form>
         </div>
     )

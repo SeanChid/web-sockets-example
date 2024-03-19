@@ -22,7 +22,7 @@ function Lobby() {
     if (!isLoggedIn) {
         navigate('/')
     } else {
-        const newWs = new WebSocket('ws://localhost:8080')
+        const newWs = new WebSocket('ws://10.0.0.50:8080')
         setWs(newWs)
         axios.get(`/api/lobby?entryCode=${entryCode}`)
           .then((res) => {
@@ -41,7 +41,9 @@ function Lobby() {
   }, [isLoggedIn, navigate, entryCode])
 
   useEffect(() => {
-    if (ws && ws.readyState === WebSocket.OPEN && lobby.lobbyId && !hasJoined) {
+    if (!lobby || !lobby.lobbyId || hasJoined) return
+    
+    if (ws && ws.readyState === WebSocket.OPEN) {
       const joinMessage = {
         type: 'joinLobby',
         lobbyId: lobby.lobbyId
