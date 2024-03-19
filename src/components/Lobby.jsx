@@ -18,40 +18,36 @@ function Lobby() {
   const {entryCode} = location.state
 
   useEffect(() => {
-
     if (!isLoggedIn) {
         navigate('/')
-    } else {
-        const newWs = new WebSocket('ws://10.0.0.50:8080')
-        setWs(newWs)
-        axios.get(`/api/lobby?entryCode=${entryCode}`)
-          .then((res) => {
+        return
+    }
+
+    const newWs = new WebSocket('ws://10.0.0.50:8080')
+    setWs(newWs)
+
+    newWs.onopen = () => {
+      axios.get(`/api/lobby?entryCode=${entryCode}`)
+        .then((res) => {
             setLobby(res.data)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-    
-        return () => {
-          newWs.close()
-        }
+            if (newWs.readyState === WebSocket.OPEN) {
+              const joinMessage = {
+                type: 'joinLobby',
+                lobbyId: res.data.lobbyId,
+                userName: user.userName
+              }
+              newWs.send(JSON.stringify(joinMessage))
+              setHasJoined(true)
+            }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
-
-
+    return () => {
+      newWs.close()
+    }
   }, [isLoggedIn, navigate, entryCode])
-
-  useEffect(() => {
-    if (!lobby || !lobby.lobbyId || hasJoined) return
-    
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      const joinMessage = {
-        type: 'joinLobby',
-        lobbyId: lobby.lobbyId
-      }
-      ws.send(JSON.stringify(joinMessage))
-      setHasJoined(true)
-    }
-  }, [ws, lobby, hasJoined])
 
   useEffect(() => {
     if (!ws) return
@@ -86,8 +82,15 @@ function Lobby() {
         <h3>Chatroom {lobby.lobbyId}, code: {entryCode}</h3>
         <div>
           {chatMessages.map((message, index) => (
-            <div key={index}>{`${message.userName}: ${message.message} ${message.timestamp}`}</div>
-          ))}
+                <div key={index}>
+                  {message.type === 'systemMessage' ? (
+                    <span style={{ fontStyle: 'italic' }}>{message.message}</span>
+                  ) : (
+                    <span>{`${message.userName}: ${message.message} ${message.timestamp}`}</span>
+                  )}
+                </div>
+              )
+          )}
         </div>
         <div>
           <input

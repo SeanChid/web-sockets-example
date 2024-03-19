@@ -5,18 +5,16 @@ const wss = new WebSocketServer({port: 8080})
 
 const clientsByLobby = new Map()
 
+const broadcast = (lobbyId, message, excludeClient) => {
+    wss.clients.forEach(client => {
+        if (client !== excludeClient && clientsByLobby.get(client) === lobbyId && client.readyState === WebSocket.OPEN) {
+            client.send(message)
+        }
+    })
+}
+
 wss.on('connection', function connection(ws) {
     console.log('A new client has joined the chat.')
-
-    // Message.findAll()
-    //     .then(messages => {
-    //         messages.forEach(message => {
-    //             ws.send(JSON.stringify(message))
-    //         })
-    //     })
-    //     .catch(error => {
-    //         console.error(error)
-    //     })
 
     ws.on('message', async function incoming(message) {
         const data = JSON.parse(message)
@@ -26,6 +24,13 @@ wss.on('connection', function connection(ws) {
             const lobbyId = data.lobbyId
 
             clientsByLobby.set(ws, lobbyId)
+
+            const joinMessage = {
+                type: 'systemMessage',
+                message: `${data.userName} has joined the chat.`
+            }
+
+            broadcast(lobbyId, JSON.stringify(joinMessage), ws)
 
             Message.findAll({where: {lobbyId: lobbyId}})
                 .then(messages => {
@@ -67,6 +72,16 @@ wss.on('connection', function connection(ws) {
     ws.on('close', function close() {
         console.log('A client has disconnected from the chat.')
 
-        clientsByLobby.delete(ws)
+        const lobbyId = clientsByLobby.get(ws)
+        if (lobbyId) {
+            clientsByLobby.delete(ws)
+
+            const leaveMessage = {
+                type: 'systemMessage',
+                message: 'A client has left the chat.'
+            }
+            broadcast(lobbyId, JSON.stringify(leaveMessage), ws)
+        }
+
     })
 })
