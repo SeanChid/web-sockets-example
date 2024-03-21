@@ -35,6 +35,7 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
+                    className='form-control'
                     placeholder='Enter a username'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -42,6 +43,7 @@ const Register = () => {
                 <br/>
                 <input
                     type='password'
+                    className='form-control'
                     placeholder='Enter a password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -49,12 +51,16 @@ const Register = () => {
                 <br/>
                 <input
                     type='password'
+                    className='form-control'
                     placeholder='Confirm password'
                     value={confirmPass}
                     onChange={(e) => setConfirmPass(e.target.value)}
                 />
                 <br/>
-                <button type='submit'>Register User</button>
+                <button type='submit' className='btn btn-primary'>Register User</button>
+                <br/>
+                <br/>
+                <button className='btn btn-primary' onClick={() => navigate('/')}>Return to Login</button>
             </form>
         </div>
     )

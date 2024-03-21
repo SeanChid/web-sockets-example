@@ -80,27 +80,32 @@ function Lobby() {
     return (
       <div>
         <h3>Chatroom {lobby.lobbyId}, code: {entryCode}</h3>
-        <div>
+        <div style={{textAlign: 'left', maxWidth: '400px', overflow: 'auto'}}>
           {chatMessages.map((message, index) => (
                 <div key={index}>
                   {message.type === 'systemMessage' ? (
                     <span style={{ fontStyle: 'italic' }}>{message.message}</span>
                   ) : (
-                    <span>{`${message.userName}: ${message.message} ${message.timestamp}`}</span>
+                    <span>
+                      <strong>{`${message.userName}: `}</strong> {`${message.message}`} <span style={{fontWeight: 300}}>{`${message.timestamp}`}</span>
+                    </span>
                   )}
                 </div>
               )
           )}
         </div>
-        <div>
+        <div className='input-group'>
           <input
             type='text'
+            className='form-control'
+            placeholder='Enter message'
             value={messageInput}
             onChange={handleMessageChange}
           />
-          <button onClick={handleMessageSend}>Send</button>
+          <button className='btn btn-success' onClick={handleMessageSend}>Send</button>
         </div>
-        <button onClick={() => navigate('/user')}>Leave Lobby</button>
+        <br/>
+        <button className='btn btn-primary' onClick={() => navigate('/user')}>Leave Lobby</button>
       </div>
     )
 }

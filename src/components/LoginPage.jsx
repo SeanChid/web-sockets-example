@@ -50,6 +50,7 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
+                    className='form-control'
                     placeholder='Username'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -57,15 +58,16 @@ const LoginPage = () => {
                 <br/>
                 <input
                     type='password'
+                    className='form-control'
                     placeholder='Password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <br/>
-                <button type='submit'>Login</button>
+                <button type='submit' className='btn btn-primary'>Login</button>
             </form>
             <br/>
-            <button onClick={() => navigate('/register')}>Register</button>
+            <button className='btn btn-primary' onClick={() => navigate('/register')}>Register</button>
         </div>
     )
 }

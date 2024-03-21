@@ -57,17 +57,23 @@ const UserPage = () => {
         <div>
             <h1>User Page</h1>
             <br/>
-            <input
-                type='text'
-                placeholder='Enter Entry Code'
-                value={entryCode}
-                onChange={(e) => setEntryCode(e.target.value)}
-            />
-            <button onClick={joinLobby}>Join Lobby</button>
+            <div className='input-group'>
+                <input
+                    type='text'
+                    className='form-control input-group-prepend'
+                    placeholder='Enter code'
+                    value={entryCode}
+                    onChange={(e) => setEntryCode(e.target.value)}
+                />
+                <button className='btn btn-primary' onClick={joinLobby}>Join Lobby</button>
+            </div>
             <br/>
-            <button onClick={createLobby}>Create Lobby</button>
+            <button className='btn btn-primary' onClick={createLobby}>Create Lobby</button>
             <br/>
-            <button onClick={handleLogout}>Logout</button>
+            <br/>
+            <div>
+                <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
+            </div>
         </div>
     )
 }
