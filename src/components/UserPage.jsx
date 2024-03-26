@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/action'
 import axios from 'axios'
+import NewLobby from './NewLobby.jsx'
 
 const UserPage = () => {
     const [entryCode, setEntryCode] = useState('')
+    const [showLobbyModal, setLobbyModal] = useState(false)
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -30,17 +32,19 @@ const UserPage = () => {
     const createLobby = () => {
         // const generatedCode = Math.floor(1000 + Math.random() * 9000).toString()
 
-        const newLobby = {
-            entryCode: entryCode
-        }
+        // const newLobby = {
+        //     entryCode: entryCode
+        // }
 
-        axios.post('/api/lobby', newLobby)
-            .then((res) => {
-                navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        // axios.post('/api/lobby', newLobby)
+        //     .then((res) => {
+        //         navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
+        //     })
+        //     .catch((error) => {
+        //         console.log(error)
+        //     })
+
+        setLobbyModal(true)
     }
 
     const joinLobby = () => {
@@ -74,6 +78,11 @@ const UserPage = () => {
             <div>
                 <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
             </div>
+
+            <NewLobby
+                showModal={showLobbyModal}
+                setShowModal={setLobbyModal}
+            />
         </div>
     )
 }
