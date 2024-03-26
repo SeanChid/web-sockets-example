@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/action'
 import axios from 'axios'
-import NewLobby from './NewLobby.jsx'
+import NewLobbyModal from './NewLobbyModal.jsx'
 
 const UserPage = () => {
     const [entryCode, setEntryCode] = useState('')
@@ -79,9 +79,11 @@ const UserPage = () => {
                 <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
             </div>
 
-            <NewLobby
+            <NewLobbyModal
                 showModal={showLobbyModal}
                 setShowModal={setLobbyModal}
+                entryCode={entryCode}
+                setEntryCode={setEntryCode}
             />
         </div>
     )
