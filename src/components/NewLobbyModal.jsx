@@ -30,7 +30,7 @@ const NewLobbyModal = (props) => {
                     <input
                         type='text'
                         className='form-control'
-                        placeholder='Choose an entry code'
+                        placeholder='Enter an entry code'
                         value={entryCode}
                         onChange={(e) => setEntryCode(e.target.value)}
                     />

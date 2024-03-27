@@ -70,9 +70,11 @@ const handlerFunctions = {
 
     addLobby: async (req, res) => {
         const {entryCode} = req.body
+        const userId = req.session.userId
 
         const newLobby = {
-            entryCode
+            entryCode,
+            userId
         }
         await Lobby.create(newLobby)
         const lobby = await Lobby.findOne({where: {entryCode: entryCode}})

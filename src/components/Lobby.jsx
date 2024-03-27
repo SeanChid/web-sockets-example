@@ -79,7 +79,7 @@ function Lobby() {
 
     return (
       <div>
-        <h3>Chatroom {lobby.lobbyId}, code: {entryCode}</h3>
+        <h3>Chatroom: {entryCode}</h3>
         <div style={{textAlign: 'left', maxWidth: '400px', overflow: 'auto'}}>
           {chatMessages.map((message, index) => (
                 <div key={index}>

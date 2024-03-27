@@ -40,17 +40,22 @@ Lobby.init (
             type: DataTypes.STRING(30),
             unique: true,
             allowNull: false
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            foreignKey: true
         }
     }, {
         sequelize: db
     }
 )
 
-class UserLobby extends Model {}
+// class UserLobby extends Model {}
 
-UserLobby.init({}, {
-    sequelize: db
-})
+// UserLobby.init({}, {
+//     sequelize: db
+// })
 
 class Message extends Model {}
 
@@ -93,10 +98,11 @@ Message.init (
     }
 )
 
-User.belongsToMany(Lobby, {through: UserLobby})
-Lobby.belongsToMany(User, {through: UserLobby})
+// User.belongsToMany(Lobby, {through: UserLobby})
+// Lobby.belongsToMany(User, {through: UserLobby})
+// Lobby.hasMany(Message, {foreignKey: 'lobbyId'})
 User.hasMany(Message, {foreignKey: 'userId'})
-Lobby.hasMany(Message, {foreignKey: 'lobbyId'})
+User.hasMany(Lobby, {foreignKey: 'userId'})
 
 if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
     console.log('Syncing database...');

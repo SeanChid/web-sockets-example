@@ -1,8 +1,10 @@
 [
     {
-        "entryCode": "waffle"
+        "entryCode": "waffle",
+        "userId": 1
     },
     {
-        "entryCode": "syrup"
+        "entryCode": "syrup",
+        "userId": 2
     }
 ]

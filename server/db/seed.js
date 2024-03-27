@@ -23,9 +23,10 @@ const usersInDB = await Promise.all(
 
 const lobbiesInDB = await Promise.all(
     lobbyData.map(async (lobby) => {
-        const {entryCode} = lobby
+        const {entryCode, userId} = lobby
         const newLobby = await Lobby.create({
-            entryCode
+            entryCode,
+            userId
         })
         return newLobby
     })
