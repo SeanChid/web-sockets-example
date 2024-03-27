@@ -9,6 +9,7 @@ const UserPage = () => {
     const [entryCode, setEntryCode] = useState('')
     const [showLobbyModal, setLobbyModal] = useState(false)
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+    const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -30,27 +31,17 @@ const UserPage = () => {
     }
 
     const createLobby = () => {
-        // const generatedCode = Math.floor(1000 + Math.random() * 9000).toString()
-
-        // const newLobby = {
-        //     entryCode: entryCode
-        // }
-
-        // axios.post('/api/lobby', newLobby)
-        //     .then((res) => {
-        //         navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //     })
-
         setLobbyModal(true)
     }
 
     const joinLobby = () => {
         axios.post('/api/joinLobby', {entryCode})
             .then((res) => {
-                navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
+                if (res.data.lobbyId === undefined) {
+                    console.log('invalid lobby')
+                } else {
+                    navigate(`/lobby/${res.data.lobbyId}`, {state: {entryCode}})
+                }
             })
             .catch((error) => {
                 console.log(error)
@@ -59,7 +50,7 @@ const UserPage = () => {
 
     return (
         <div>
-            <h1>User Page</h1>
+            <h2>Welcome, {user.userName}</h2>
             <br/>
             <div className='input-group'>
                 <input
