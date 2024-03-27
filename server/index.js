@@ -23,6 +23,7 @@ const {
     getSession,
     getLobby,
     addLobby,
+    deleteLobby,
     joinLobby
 } = handlerFunctions
 
@@ -32,6 +33,7 @@ app.post('/api/user', addUser)
 app.get('/api/session', getSession)
 app.get('/api/lobby', getLobby)
 app.post('/api/lobby', addLobby)
+app.delete('/api/lobby/:lobbyId', deleteLobby)
 app.post('/api/joinLobby', joinLobby)
 
 ViteExpress.listen(app, 8000, () => console.log('server is running on 8000'))

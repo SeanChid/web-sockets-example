@@ -82,6 +82,17 @@ const handlerFunctions = {
         res.send(lobby)
     },
 
+    deleteLobby: async (req, res) => {
+        const {lobbyId} = req.params
+        const userId = req.session.userId
+
+        const lobby = await Lobby.findByPk(lobbyId)
+        await lobby.destroy()
+        const lobbies = await Lobby.findAll({where: {userId}})
+
+        res.send(lobbies)
+    },
+
     joinLobby: async (req, res) => {
         const {entryCode} = req.body
 
