@@ -22,6 +22,7 @@ const {
     addUser,
     getSession,
     getLobby,
+    getLobbies,
     addLobby,
     deleteLobby,
     joinLobby
@@ -32,6 +33,7 @@ app.post('/api/logoutUser', logoutUser)
 app.post('/api/user', addUser)
 app.get('/api/session', getSession)
 app.get('/api/lobby', getLobby)
+app.get('/api/lobbies', getLobbies)
 app.post('/api/lobby', addLobby)
 app.delete('/api/lobby/:lobbyId', deleteLobby)
 app.post('/api/joinLobby', joinLobby)

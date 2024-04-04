@@ -68,6 +68,14 @@ const handlerFunctions = {
         res.send(lobby)
     },
 
+    getLobbies: async (req, res) => {
+        const userId = req.session.userId
+
+        const lobbies = await Lobby.findAll({where: {userId: userId}})
+
+        res.send(lobbies)
+    },
+
     addLobby: async (req, res) => {
         const {entryCode} = req.body
         const userId = req.session.userId
