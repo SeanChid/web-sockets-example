@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/action'
 import axios from 'axios'
 import NewLobbyModal from './NewLobbyModal.jsx'
+import LobbyRow from './LobbyRow.jsx'
 
 const UserPage = () => {
     const [entryCode, setEntryCode] = useState('')
     const [showLobbyModal, setLobbyModal] = useState(false)
+    const [lobbyData, setLobbyData] = useState([])
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
@@ -18,6 +20,16 @@ const UserPage = () => {
             navigate('/')
         }
     }, [isLoggedIn, navigate])
+
+    useEffect(() => {
+        axios.get('/api/lobbies')
+            .then((res) => {
+                setLobbyData(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
 
     const handleLogout = () => {
         axios.post('/api/logoutUser')
@@ -48,9 +60,20 @@ const UserPage = () => {
             })
     }
 
+    const lobbies = lobbyData.map((lobby) => {
+        return <LobbyRow 
+            key={lobby.lobbyId}
+            entryCode={lobby.entryCode}
+            lobbyId={lobby.lobbyId}
+            setLobbyData={setLobbyData}
+        />
+    })
+
     return (
         <div>
             <h2>Welcome, {user.userName}</h2>
+            <br/>
+            <div>{lobbies}</div>
             <br/>
             <div className='input-group'>
                 <input
