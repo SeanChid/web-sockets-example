@@ -23,7 +23,7 @@ function Lobby() {
         return
     }
 
-    const newWs = new WebSocket('ws://192.168.0.50:8080')
+    const newWs = new WebSocket('ws://localhost:8080')
     setWs(newWs)
 
     newWs.onopen = () => {
